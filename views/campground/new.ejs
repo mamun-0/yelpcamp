@@ -1,40 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>New Campgorund</title>
-  </head>
-  <body>
-    <form action="/campground" method="POST">
-      <div>
-        <label for="title">Title</label>
-        <input type="text" name="campground[title]" id="title" />
-      </div>
-      <div>
-        <label for="price">Price</label>
-        <input type="number" name="campground[price]" id="price" />
-      </div>
-      <div>
-        <label for="Image">Image</label>
-        <input type="text" name="campground[image]" id="Image" />
-      </div>
-      <div>
-        <label for="location">Location</label>
-        <input type="text" name="campground[location]" id="location" />
-      </div>
-      <div>
-        <label for="description">Description</label>
-        <br />
-        <textarea
-          name="campground[description]"
-          id="description"
-          cols="20"
-          rows="10"
-        ></textarea>
-      </div>
-      <button>Submit</button>
-    </form>
-  </body>
-</html>
+<% layout('layouts/boilerplate') %>
+<form action="/campground" method="POST">
+  <div>
+    <label for="title">Title</label>
+    <input type="text" name="campground[title]" id="title" />
+  </div>
+  <div>
+    <label for="price">Price</label>
+    <input type="number" name="campground[price]" id="price" />
+  </div>
+  <div>
+    <label for="Image">Image</label>
+    <input type="text" name="campground[image]" id="Image" />
+  </div>
+  <div>
+    <label for="location">Location</label>
+    <input type="text" name="campground[location]" id="location" />
+  </div>
+  <div>
+    <label for="description">Description</label>
+    <br />
+    <textarea
+      name="campground[description]"
+      id="description"
+      cols="20"
+      rows="10"></textarea>
+  </div>
+  <button>Submit</button>
+</form>

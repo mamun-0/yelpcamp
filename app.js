@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const ejsMate = require('ejs-mate');
 const Campground = require('./models/campground');
 const methodOverride = require('method-override');
 const mongoose = require('mongoose');
@@ -14,6 +15,7 @@ mongoose
     console.log('Failed to connect.');
   });
 // set EJS view engine
+app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 //middleware

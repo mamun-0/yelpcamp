@@ -5,6 +5,7 @@ const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
 const campgroundRouter = require('./route/campground');
 const session = require('express-session');
+const flash = require('connect-flash');
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
 mongoose
@@ -35,6 +36,12 @@ app.use(
     },
   })
 );
+app.use(flash());
+app.use((req, res, next) => {
+  res.locals.message = req.flash('success');
+  res.locals.error = req.flash('error');
+  next();
+});
 // routes
 app.use('/campgrounds', campgroundRouter);
 app.all('*', (req, res) => {

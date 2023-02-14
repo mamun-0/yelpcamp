@@ -26,6 +26,7 @@ router.post(
     campground.reviews.push(newReview);
     await newReview.save();
     await campground.save();
+    req.flash('success', 'Review created successfully.');
     res.redirect(`/campgrounds/${id}`);
   })
 );
@@ -35,10 +36,11 @@ router.get('/new', (req, res) => {
 router.post(
   '/',
   validateCampground,
-  wrapAsync(async (req, res, next) => {
+  wrapAsync(async (req, res) => {
     const { campground } = req.body;
     const newCampground = new Campground({ ...campground });
     await newCampground.save();
+    req.flash('success', 'Successfully created campground');
     res.redirect(`/campgrounds/${newCampground._id}`);
   })
 );
@@ -56,9 +58,10 @@ router.put(
   wrapAsync(async (req, res) => {
     const { id } = req.params;
     const { campground } = req.body;
-    const updatedCampground = await Campground.findByIdAndUpdate(id, {
+    await Campground.findByIdAndUpdate(id, {
       ...campground,
     });
+    req.flash('success', 'Successfully updated campground');
     res.redirect(`/campgrounds/${id}`);
   })
 );
@@ -67,6 +70,10 @@ router.get(
   wrapAsync(async (req, res) => {
     const { id } = req.params;
     const campground = await Campground.findById(id).populate('reviews');
+    if (!campground) {
+      req.flash('error', 'Campground not found!');
+      return res.redirect('/campgrounds');
+    }
     res.render('campground/show', { campground });
   })
 );
@@ -75,6 +82,7 @@ router.delete(
   wrapAsync(async (req, res) => {
     const { id } = req.params;
     await Campground.findByIdAndDelete(id);
+    req.flash('success', 'Successfully deleted campground');
     res.redirect('/campgrounds');
   })
 );
@@ -84,6 +92,7 @@ router.delete(
     const { id, reviewId } = req.params;
     await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
     await Review.findByIdAndDelete(reviewId);
+    req.flash('success', 'Successfully deleted review');
     res.redirect(`/campgrounds/${id}`);
   })
 );

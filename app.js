@@ -3,7 +3,11 @@ const app = express();
 const path = require('path');
 const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
-const campgroundRouter = require('./route/campground');
+const campgroundRoute = require('./route/campground');
+const userRoute = require('./route/user');
+const passport = require('passport');
+const localStrategy = require('passport-local');
+const User = require('./models/user');
 const session = require('express-session');
 const flash = require('connect-flash');
 const mongoose = require('mongoose');
@@ -36,6 +40,12 @@ app.use(
     },
   })
 );
+// passport
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new localStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 app.use(flash());
 app.use((req, res, next) => {
   res.locals.message = req.flash('success');
@@ -43,7 +53,8 @@ app.use((req, res, next) => {
   next();
 });
 // routes
-app.use('/campgrounds', campgroundRouter);
+app.use('/campgrounds', campgroundRoute);
+app.use('/user', userRoute);
 app.all('*', (req, res) => {
   res.send('404 page not found');
 });

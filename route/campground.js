@@ -6,6 +6,7 @@ const wrapAsync = require('../utils/wrapAsync');
 const {
   validateCampground,
   validateReview,
+  isLoggedin,
 } = require('../Middleware/middleware');
 router.get(
   '/',
@@ -17,6 +18,7 @@ router.get(
 
 router.post(
   '/:id/review',
+  isLoggedin,
   validateReview,
   wrapAsync(async (req, res) => {
     const { id } = req.params;
@@ -30,11 +32,12 @@ router.post(
     res.redirect(`/campgrounds/${id}`);
   })
 );
-router.get('/new', (req, res) => {
+router.get('/new', isLoggedin, (req, res) => {
   res.render('campground/new');
 });
 router.post(
   '/',
+  isLoggedin,
   validateCampground,
   wrapAsync(async (req, res) => {
     const { campground } = req.body;
@@ -46,6 +49,7 @@ router.post(
 );
 router.get(
   '/:id/edit',
+  isLoggedin,
   wrapAsync(async (req, res) => {
     const { id } = req.params;
     const campground = await Campground.findById(id);
@@ -54,6 +58,7 @@ router.get(
 );
 router.put(
   '/:id',
+  isLoggedin,
   validateCampground,
   wrapAsync(async (req, res) => {
     const { id } = req.params;
@@ -79,6 +84,7 @@ router.get(
 );
 router.delete(
   '/:id',
+  isLoggedin,
   wrapAsync(async (req, res) => {
     const { id } = req.params;
     await Campground.findByIdAndDelete(id);
@@ -88,6 +94,7 @@ router.delete(
 );
 router.delete(
   '/:id/reviews/:reviewId',
+  isLoggedin,
   wrapAsync(async (req, res) => {
     const { id, reviewId } = req.params;
     await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });

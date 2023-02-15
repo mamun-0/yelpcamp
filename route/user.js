@@ -12,10 +12,19 @@ router.get('/register', (req, res) => {
 router.post(
   '/register',
   wrapAsync(async (req, res) => {
-    const { username, email, password } = req.body;
-    const newUser = new User({ email, username });
-    const registeredUser = await User.register(newUser, password);
-    return res.redirect('/campgrounds');
+    try {
+      const { username, email, password } = req.body;
+      const newUser = new User({ email, username });
+      const registeredUser = await User.register(newUser, password);
+      req.login(registeredUser, function (err) {
+        if (err) return next(err);
+        req.flash('success', 'You are registered');
+        return res.redirect('/campgrounds');
+      });
+    } catch (e) {
+      req.flash('error', e.message);
+      res.redirect('/user/register');
+    }
   })
 );
 router.post(
@@ -32,7 +41,7 @@ router.post(
     res.redirect(redirectUrl);
   }
 );
-router.get('/logout', (req, res) => {
+router.get('/logout', (req, res, next) => {
   req.logout(function (err) {
     if (err) {
       return next(err);

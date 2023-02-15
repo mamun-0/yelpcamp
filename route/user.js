@@ -4,9 +4,17 @@ const wrapAsync = require('../utils/wrapAsync');
 const User = require('../models/user');
 const passport = require('passport');
 router.get('/login', (req, res) => {
+  if (req.isAuthenticated()) {
+    req.flash('success', 'You are already logged in!');
+    return res.redirect('/campgrounds');
+  }
   res.render('user/login');
 });
 router.get('/register', (req, res) => {
+  if (req.isAuthenticated()) {
+    req.flash('error', 'You must logout first');
+    return res.redirect('/campgrounds');
+  }
   res.render('user/register');
 });
 router.post(

@@ -1,6 +1,24 @@
+body {
+  overflow-x: hidden;
+}
 .card-hover {
   transition: all 0.2s;
 }
 .card-hover:hover {
   scale: 1.02;
+}
+.hero-img {
+  height: 60vh;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url('../image/camp-photo-beside-river.png');
+  background-size: cover;
+  background-position: bottom;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: rgb(238, 228, 228);
+}
+.hero-img h2 {
+  font-weight: 700;
 }

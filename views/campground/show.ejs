@@ -19,7 +19,11 @@
             <h4 class="d-inline">&#2547;<%= campground.price %></h4>
           </li>
           <li class="list-group-item">Location : <%= campground.location %></li>
+          <li class="list-group-item">
+            Submitted by : <%= campground.author.username %>
+          </li>
         </ul>
+        <% if(currentUser && campground.author.equals(currentUser._id)) {%>
         <div class="card-body d-flex">
           <a
             class="btn btn-primary"
@@ -33,6 +37,7 @@
             <button class="btn btn-danger">Delete</button>
           </form>
         </div>
+        <% } %>
       </div>
       <a href="/campgrounds">Back to home</a>
     </div>

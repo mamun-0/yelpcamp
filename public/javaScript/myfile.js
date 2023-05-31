@@ -7,13 +7,12 @@ if (searchInput) {
 function handleInput(e) {
   let val = e.target.value.toLowerCase();
   const allCards = document.querySelectorAll('.card');
-  console.log(allCards);
   allCards.forEach((element) => {
     const heading = element.querySelector('.card-title');
     if (!heading.innerText.toLowerCase().includes(val)) {
-      element.style.display = 'none';
+      element.parentElement.style.display = 'none';
     } else {
-      element.style.display = 'block';
+      element.parentElement.style.display = 'block';
     }
   });
 }

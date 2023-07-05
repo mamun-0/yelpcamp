@@ -1,19 +1,27 @@
 <% if(message && message.length) {%>
-<div class="alert alert-warning alert-dismissible fade show" role="alert">
-  <strong><%= message %> </strong>
-  <button
-    type="button"
-    class="btn-close"
-    data-bs-dismiss="alert"
-    aria-label="Close"></button>
+<div class="flash-parent">
+  <div
+    class="text-center alert alert-warning alert-dismissible fade show flash-width"
+    role="alert">
+    <strong><%= message %> </strong>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"></button>
+  </div>
 </div>
 <% } %> <% if(error && error.length) {%>
-<div class="alert alert-danger alert-dismissible fade show" role="alert">
-  <strong><%= error %> </strong>
-  <button
-    type="button"
-    class="btn-close"
-    data-bs-dismiss="alert"
-    aria-label="Close"></button>
+<div class="flash-parent">
+  <div
+    class="text-center alert alert-danger alert-dismissible fade show flash-width"
+    role="alert">
+    <strong><%= error %> </strong>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"></button>
+  </div>
 </div>
 <% } %>

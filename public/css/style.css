@@ -22,3 +22,11 @@ body {
 .hero-img h2 {
   font-weight: 700;
 }
+.flash-parent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.flash-width {
+  width: 50%;
+}

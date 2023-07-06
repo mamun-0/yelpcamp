@@ -39,9 +39,13 @@
         </div>
         <% } %>
       </div>
-      <a href="/campgrounds">Back to home</a>
+      <a class="btn btn-info mt-2" href="/campgrounds">👈Back</a>
     </div>
     <div class="col-6">
+      <% if(!currentUser){ %>
+      <h2>Login & Leave a review↙</h2>
+      <a href="/user/login" class="btn btn-primary">Login👈</a>
+      <% }else{ %>
       <h2>Leave a review</h2>
       <form
         action="/campgrounds/<%= campground._id %>/review"
@@ -68,18 +72,23 @@
         </div>
         <button class="btn btn-outline-warning my-3">Submit</button>
       </form>
+      <% } %>
+
       <h2 class="my-3">Review Section</h2>
       <% for(let review of campground.reviews){ %>
       <div class="card mb-3 p-2">
         <div class="card-body">
-          <h4 class="card-title">Review : <%= review.body %></h4>
+          <h4 class="lead card-title">Review : <%= review.body %></h4>
           <p class="card-text">Rating : <%= review.rating%></p>
+          <b>Reviewed by : <%= review.author.username %></b>
         </div>
+        <% if(currentUser && review.author.equals(currentUser._id)) {%>
         <form
           action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>?_method=DELETE"
           method="POST">
           <button class="btn btn-sm btn-danger">Delete</button>
         </form>
+        <% } %> <%= console.log(currentUser) %>
       </div>
 
       <% } %>

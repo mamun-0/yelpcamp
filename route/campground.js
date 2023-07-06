@@ -22,9 +22,11 @@ router.post(
   validateReview,
   wrapAsync(async (req, res) => {
     const { id } = req.params;
+    const authorID = req.user._id;
     const { review } = req.body;
     const campground = await Campground.findById(id);
     const newReview = new Review({ ...review });
+    newReview.author = authorID;
     campground.reviews.push(newReview);
     await newReview.save();
     await campground.save();
@@ -76,7 +78,7 @@ router.get(
   wrapAsync(async (req, res) => {
     const { id } = req.params;
     const campground = await Campground.findById(id)
-      .populate('reviews')
+      .populate({ path: 'reviews', populate: { path: 'author' } })
       .populate('author');
     if (!campground) {
       req.flash('error', 'Campground not found!');

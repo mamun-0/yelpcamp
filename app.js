@@ -56,6 +56,9 @@ app.use((req, res, next) => {
 // routes
 app.use('/campgrounds', campgroundRoute);
 app.use('/user', userRoute);
+app.get('/', (req, res) => {
+  res.render('home');
+});
 app.all('*', (req, res) => {
   res.send('404 page not found');
 });

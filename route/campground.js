@@ -3,6 +3,9 @@ const router = express.Router({ mergeParams: true });
 const Campground = require('../models/campground');
 const Review = require('../models/review');
 const wrapAsync = require('../utils/wrapAsync');
+const { storage } = require('../cloudinary/cloudinary');
+const multer = require('multer');
+const upload = multer({ storage });
 const {
   validateCampground,
   validateReview,
@@ -40,11 +43,13 @@ router.get('/new', isLoggedin, (req, res) => {
 router.post(
   '/',
   isLoggedin,
+  upload.single('image'),
   validateCampground,
   wrapAsync(async (req, res) => {
     const { campground } = req.body;
     const newCampground = new Campground({ ...campground });
     newCampground.author = req.user._id;
+    newCampground.image = req.file.path;
     await newCampground.save();
     req.flash('success', 'Successfully created campground');
     res.redirect(`/campgrounds/${newCampground._id}`);

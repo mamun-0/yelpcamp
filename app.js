@@ -1,37 +1,37 @@
-if (process.env.NODE_ENV !== 'production') require('dotenv').config();
-const express = require('express');
+if (process.env.NODE_ENV !== "production") require("dotenv").config();
+const express = require("express");
 const app = express();
-const path = require('path');
-const ejsMate = require('ejs-mate');
-const methodOverride = require('method-override');
-const campgroundRoute = require('./route/campground');
-const userRoute = require('./route/user');
-const passport = require('passport');
-const localStrategy = require('passport-local');
-const User = require('./models/user');
-const session = require('express-session');
-const flash = require('connect-flash');
-const mongoose = require('mongoose');
-mongoose.set('strictQuery', false);
+const path = require("path");
+const ejsMate = require("ejs-mate");
+const methodOverride = require("method-override");
+const campgroundRoute = require("./route/campground");
+const userRoute = require("./route/user");
+const passport = require("passport");
+const localStrategy = require("passport-local");
+const User = require("./models/user");
+const session = require("express-session");
+const flash = require("connect-flash");
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", false);
 mongoose
-  .connect('mongodb://127.0.0.1:27017/yelpcamp')
+  .connect(process.env.MONGO_URL + "/yelpcamp")
   .then(() => {
-    console.log('Database connected');
+    console.log("Database connected");
   })
   .catch(() => {
-    console.log('Failed to connect.');
+    console.log("Failed to connect.");
   });
 // set EJS view engine
-app.engine('ejs', ejsMate);
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.engine("ejs", ejsMate);
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 //middleware
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
-app.use(methodOverride('_method'));
+app.use(methodOverride("_method"));
 app.use(
   session({
-    secret: 'iwillsetthissecretkeyletter',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -50,24 +50,25 @@ passport.deserializeUser(User.deserializeUser());
 app.use(flash());
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
-  res.locals.message = req.flash('success');
-  res.locals.error = req.flash('error');
+  res.locals.message = req.flash("success");
+  res.locals.error = req.flash("error");
   next();
 });
 // routes
-app.use('/campgrounds', campgroundRoute);
-app.use('/user', userRoute);
-app.get('/', (req, res) => {
-  res.render('home');
+app.use("/campgrounds", campgroundRoute);
+app.use("/user", userRoute);
+app.get("/", (req, res) => {
+  res.render("home");
 });
-app.all('*', (req, res) => {
-  res.send('404 page not found');
+app.all("*", (req, res) => {
+  res.send("404 page not found");
 });
 app.use((err, req, res, next) => {
   const { statusCode = 500 } = err;
-  if (!err.message) err.message = 'Something went wrong try again later!';
-  res.status(statusCode).render('Error/error', { error: err });
+  if (!err.message) err.message = "Something went wrong try again later!";
+  res.status(statusCode).render("Error/error", { error: err });
 });
-app.listen(3000, () => {
-  console.log('Server listening on port 3000');
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
 });

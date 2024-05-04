@@ -1,3 +1,4 @@
 seed/
 node_modules/
 .env
+.vercel
